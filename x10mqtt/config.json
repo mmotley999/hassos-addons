@@ -8,17 +8,21 @@
   "auto_uart": true,
   "map": ["config:rw", "ssl"],
   "options": {
-    "serial_port": "/dev/ttyUSB0"
+    "serial_port": "/dev/ttyUSB0",
     "mqtt_host": "",
-    "mqtt_port": 1833,
-    "mqtt_user": ""
-	"mqtt_pass": ""
+    "mqtt_port": 1883,
+    "mqtt_user": "",
+	"mqtt_pass": "",
+	"cmd_topic": "x10/cmd",
+	"stat_topic": "x10/stat"
   },
   "schema": {
     "serial_port": "str",
     "mqtt_host": "str",
 	"mqtt_port": "int",
     "mqtt_user": "str?",
-	"mqtt_pass": "str?"
+	"mqtt_pass": "str?",
+	"cmd_topic": "str",
+	"stat_topic": "str"
   }
 }
