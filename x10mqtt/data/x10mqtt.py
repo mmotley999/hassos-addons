@@ -86,7 +86,7 @@ def execute(client, cmd, housecode):
   result = subprocess.run(["heyu", cmd.lower(), housecode.lower()])
   if result.returncode:
     print("Error running heyu, return code: "+str(result.returncode))
-  print("Publishing to "+stattopic+"/"+housecode.lower())
+  print("Device Status Update: "+stattopic+"/"+housecode.lower())
   client.publish(stattopic+"/"+housecode.lower(),cmd.upper())
   return (result.returncode)
 
@@ -121,7 +121,7 @@ def monitor():
 
 def rcviaddr(housecode):
   global rcvihc
-  print ("rcvi housecode: "+housecode)
+  # Store the received housecode for when rcvifunc is received
   rcvihc = housecode
 
 #
@@ -135,8 +135,8 @@ def rcviaddr(housecode):
 
 def rcvifunc(client,func):
   global rcvihc
-  print ("rcvi func: "+func)
   if rcvihc:
+   print("Remote status change, publishing stat update: "+stattopic+"/"+rcvihc.lower()+" is now "+func.upper())
    client.publish(stattopic+"/"+rcvihc.lower(),func.upper())
    rcvihc = ""
 
@@ -164,16 +164,17 @@ def on_message(client, userdata, message):
   # So the last part is the device we want to control
 
   command = str(message.payload.decode('utf-8')).upper()
-  print(message.topic+" "+command)
+  print("Received: "+message.topic+" "+command)
   topiclist = message.topic.split("/")
 
   # Get the homecode and convert it to upper case
   hc = topiclist[len(topiclist)-1].upper()
-  print("Homecode is "+hc)
+
 
   # Check that everything is right
   hcpattern = re.compile("^[A-P][0-9]+$")
   if command in ["ON", "OFF"] and hcpattern.match(hc):
+    print("Sending X10 command to homecode "+hc)
     result = execute(client, command, hc)
   else:
     print("Invalid command or home code")
@@ -205,7 +206,7 @@ except:
 
 # Start the MQTT loop
 
-print("Waiting for MQTT messages")
+print("Waiting for MQTT messages and monitoring for remote changes")
 client.loop_start()
 
 # We run 'heyu monitor' in the background to monitor for any X10 changes outside of us (e.g. X10 remotes)
