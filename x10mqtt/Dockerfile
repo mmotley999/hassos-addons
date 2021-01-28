@@ -12,7 +12,7 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 RUN \
     apk add --no-cache --virtual .build-dependencies \
-        tar=1.32-r1 \
+        tar \
 		curl \
 		build-base \
     \
