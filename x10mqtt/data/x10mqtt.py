@@ -87,7 +87,7 @@ def execute(client, cmd, housecode):
   if result.returncode:
     print("Error running heyu, return code: "+str(result.returncode))
   print("Device Status Update: "+stattopic+"/"+housecode.lower())
-  client.publish(stattopic+"/"+housecode.lower(),cmd.upper())
+  client.publish(stattopic+"/"+housecode.lower(),cmd.upper(),retain=True)
   return (result.returncode)
 
 #
@@ -137,7 +137,7 @@ def rcvifunc(client,func):
   global rcvihc
   if rcvihc:
    print("Remote status change, publishing stat update: "+stattopic+"/"+rcvihc.lower()+" is now "+func.upper())
-   client.publish(stattopic+"/"+rcvihc.lower(),func.upper())
+   client.publish(stattopic+"/"+rcvihc.lower(),func.upper(), retain=True)
    rcvihc = ""
 
 #
