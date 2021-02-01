@@ -1,6 +1,6 @@
 {
   "name": "X10 MQTT Gateway",
-  "version": "dev",
+  "version": "0.1",
   "slug": "x10mqtt",
   "description": "MQTT gateway for the X10 CM11",
   "url": "https://github.com/mmotley999/x10mqtt",
