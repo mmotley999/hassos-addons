@@ -24,6 +24,6 @@
 	"mqtt_pass": "str?",
 	"cmd_topic": "str",
 	"stat_topic": "str"
-  }
+  },
   "image": "mmotley999/{arch}-hassos-x10mqtt"
 }
