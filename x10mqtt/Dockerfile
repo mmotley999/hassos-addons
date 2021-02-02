@@ -46,6 +46,7 @@ RUN \
 # Copy data
 COPY data/x10mqtt.py /usr/local/bin/
 COPY data/run.sh /
+RUN chmod a+x /run.sh
 
 WORKDIR /
 CMD [ "/run.sh" ]
