@@ -16,6 +16,10 @@ https://github.com/mmotley999/hassos-addons
 
 A simple MQTT gateway for the X10 CM11a serial interface.  Supports turning on and off X10 devices using MQTT topics.
 
+### x10mqttbeta
+
+Beta/testing version of the x10mqtt repo.  Currently used for testing CM17A support.
+
 ## Support
 
 Please open an issue here on Github.
