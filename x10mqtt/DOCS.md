@@ -2,7 +2,9 @@
 
 
 
-This add-on provides MQTT control of X10 devices for the CM11A RS232 Serial interface.  It also monitors for X10 changes that occur outside of Home Assistant (e.g. the use of X10 remote controls) and updates the status in Home Assistant.
+This add-on provides MQTT control of X10 devices for the CM11 and CM17A "Firecracker" RS232 Serial interface to X10.
+
+When using a CM11, the addon also monitors for X10 changes that occur outside of Home Assistant (e.g. the use of X10 remote controls) and updates the status in Home Assistant.
 
 Only ON and OFF commands are supported.  Dimming is not currently supported.
 
@@ -14,6 +16,7 @@ Example add-on configuration:
 
 ```json
     "serial_port": "/dev/ttyUSB0",
+    "cm17_in_use:" false,
     "mqtt_host": "core-mosquitto",
     "mqtt_port": 1883,
     "mqtt_user": "",
@@ -25,6 +28,18 @@ Example add-on configuration:
 #### Option: `serial_port`
 
 The serial port for the CM11A interface, which is usually connected via a USB-to-Serial device.  You can find this by going to "Supervisor" screen, selecting the "System" tab.   On the "Host" card, select the 3-dot option and select "Hardware"
+
+#### Option: `cm17_in_use`
+
+Boolean.  
+
+If you are using a CM17A "Firecracker" module as your primary controller, enable this option (set to '**true**').  
+
+If you are *only* using a CM11 module, set to '**false**'. 
+
+Note that you can run the CM11 and CM17A together (see below for details).  Normally you would still set this option to **true** to use the CM17A as the primary X10 controller.
+
+See below for issues with keeping your X10 and HASS environment in-sync.
 
 #### Option: `mqtt_host`
 
@@ -81,18 +96,28 @@ A `light` is configured in a similar way.  See the Home Assistant documentation 
 
 ### Potential Sync Issues
 
-Most X10 devices do not have a way to determine their status via a query.  
+Most X10 devices do not have a way to determine their status via a query.  Therefore, it is possible that Home Assistant could get out-of-sync with the status of the device.  
 
-Therefore, it is possible that Home Assistant could get out-of-sync with the status of the device.  Although the add-on makes every effort to mitigate this by using retained status messages and by monitoring any outside changes to an X10 device via X10 remotes (by using 'heyu monitor'), there are conditions where things could get out of sync:
+The add-on makes every effort to mitigate this by using retained MQTT status messages.  Additionally, when using a CM11, the add-on monitors for any outside changes to an X10 device via X10 remotes or local toggles (by using 'heyu monitor' and searching for specific events). 
+
+With the CM11, Home Assistant can get out of sync by:
 
 - Making changes to an X10 device when the add-on is not running.
 - X10 device changes that do not advertise their change, and hence not picked up by 'heyu monitor'
 
-If this happens, simply cycle the device in the Home Assistant interface to get it back in sync.
+Note that the CM17A is a transmit-only device and does not report X10 changes, therefore it is much more likely that Home Assistant and your X10 environment can get out-of-sync unless you only make X10 on/off events through Home Assistant.
+
+In most cases, you can resync Home Assistant and your X10 device by toggling the device power in the Home Assistant interface.
+
+### Using a CM17A and a CM11A Together
+
+You can use both the CM17A for transmitting codes and a CM11 for receiving X10 updates simultaenously!  Simply connect the CM11 to the DB9 pass-through port on the CM17A module.
+
+This is helpful if you have a CM11 that is not transmitting properly, or you simply wish to use RF transmission instead of power line for control.  Using the CM11 in tandem allows for X10 commands outside Home Assistant to be read by the add-on to mitigate the out-of-sync issues discussed in the section above.
 
 ## Support
 
-At the moment, the best way to obtain support is by opening a Issue on my [Github Repository](https://github.com/mmotley999/addons/)
+At the moment, the best way to obtain support is via the thread on the Home Assistant Community (https://community.home-assistant.io/t/home-assistant-add-on-x10-cm11-to-mqtt-gateway/276064)
 
 ## Authors and contributors
 

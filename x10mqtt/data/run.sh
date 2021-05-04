@@ -19,6 +19,15 @@ export MQTTPASS=$(bashio::config "mqtt_pass")
 export MQTTCMDTOPIC=$(bashio::config "cmd_topic")
 export MQTTSTATTOPIC=$(bashio::config "stat_topic")
 
+# Export environement if CM17 is defined
+
+if bashio::config.true "cm17_in_use" ; then
+  bashio::log.info "CM17 is enabled"
+  export CM17="True"
+else
+  bashio::log.info "CM11 is enabled"
+fi
+  
 # Start heyu engine
 heyu engine
 

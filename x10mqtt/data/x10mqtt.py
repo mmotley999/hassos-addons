@@ -74,7 +74,13 @@ try:
 except:
   stattopic = "x10/stat"
 
-
+#
+# Whether a CM17A is in use
+#
+if os.getenv('CM17') != None:
+  cm17 = True
+else:
+  cm17 = False
 
 #
 # Execute Heyu command
@@ -82,8 +88,17 @@ except:
 #   ON - turn on housecode
 #   OFF - Turn off housecode
 #
+#
 def execute(client, cmd, housecode):
-  result = subprocess.run(["heyu", cmd.lower(), housecode.lower()])
+  # For the CM11, send command to heyu as-is (ON or OFF)
+  # For the CM17, we need to change it to FON or FOFF.
+  heyucmd = cmd
+  if cm17:
+    if cmd.lower() == "on":
+      heyucmd = "fon"
+    if cmd.lower() == "off":
+      heyucmd = "foff"
+  result = subprocess.run(["heyu", heyucmd.lower(), housecode.lower()])
   if result.returncode:
     print("Error running heyu, return code: "+str(result.returncode))
   print("Device Status Update: "+stattopic+"/"+housecode.lower())
@@ -203,6 +218,9 @@ try:
 except:
   print("Connection failed. Make sure broker, port, and user is defined correctly")
   exit(1)
+
+if cm17:
+  print("CM17 is in use")
 
 # Start the MQTT loop
 
