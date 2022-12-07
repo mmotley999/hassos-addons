@@ -1,6 +1,10 @@
 # Home Assistant Community Add-on: X10mqtt
 
+___
+**NOTE:  This addon is no longer being actively developed, as I no longer have access to X10 hardware for testing.**
 
+dbrand66 has written a Docker container that he has had success with.  It can be deployed via the Portainer addon in HA.  Check it out:  https://github.com/dbrand666/docker-heyu-mqtt
+___
 
 ## About
 
