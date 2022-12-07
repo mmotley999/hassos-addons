@@ -1,5 +1,9 @@
 # mmotley999 Add-Ons
 
+___
+**NOTE:  This addon is no longer being actively developed, as I no longer have access to X10 hardware for testing.**
+___
+
 ## Installation
 
 Add this repository to your Home Assistant installation by going to Supervisor -> Add-on Store, selecting the options icon (3 dots) in the upper-right, and click Repositories.
